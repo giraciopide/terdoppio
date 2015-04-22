@@ -1,2 +1,2 @@
 # terdoppio
-A pet-project implementation of a torrent library.
+A pet-project torrent library.
