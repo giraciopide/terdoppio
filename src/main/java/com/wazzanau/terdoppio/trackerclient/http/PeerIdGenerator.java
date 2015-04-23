@@ -11,6 +11,11 @@ public class PeerIdGenerator {
 
 	private PeerIdGenerator() { }
 	
+	/**
+	 * Generates a new peer id. The peer id generated will be in the form: 
+     * the string "-TDP" followed by 16 random bytes. Note that the the random part might will not necessarily containing
+     * only printable ascii characters.
+	 */
 	public static byte[] generatePeerId() {
 		ByteBuffer id = ByteBuffer.allocate(idLen);
 		id.put(idPrefix);
@@ -20,10 +25,14 @@ public class PeerIdGenerator {
 		return id.array();
 	}
 	
-	public static byte nextPrintableChar() {
+	private static byte nextPrintableChar() {
 		return (byte)(rnd.nextInt(126 - 32) + 32); // all the range of printables ascii chars
 	}
 	
+	/**
+	 * Generates a new peer id. The peer id generated will be in the form: 
+     * the string "-TDP" followed by 16 random ascii printable chars.
+	 */
 	public static byte[] generateReadablePeerId() {
 		ByteBuffer id = ByteBuffer.allocate(idLen);
 		id.put(idPrefix);
@@ -31,10 +40,5 @@ public class PeerIdGenerator {
 			id.put(nextPrintableChar());
 		}
 		return id.array();
-	}
-	
-	public static void main(String[] args) {
-		byte[] peerId = PeerIdGenerator.generateReadablePeerId();
-		System.out.println(ByteUtils.toString(peerId));
 	}
 }

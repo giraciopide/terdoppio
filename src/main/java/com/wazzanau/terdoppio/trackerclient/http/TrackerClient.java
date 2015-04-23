@@ -73,7 +73,7 @@ public class TrackerClient {
 	private String trackerId = null; 		// If a previous announce contained a tracker id, it should be set here.
 	
 	/**
-	 * Holds the additional "custom" parameter.
+	 * Holds the additional "custom" parameters.
 	 */
 	private Map<String, String> customRequestParameters = new HashMap<String, String>();
 	

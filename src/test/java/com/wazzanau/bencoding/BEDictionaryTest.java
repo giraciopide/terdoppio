@@ -72,7 +72,7 @@ public class BEDictionaryTest {
 	}
 	
 	@Test
-	public void testInfoHash() throws IOException, DecodingException {
+	public void testInfoHashLength() throws IOException, DecodingException {
 		Iterator<File> iter = FileUtils.iterateFiles(new File("src/test/resources/torrents"), new String[] {"torrent"}, false);
 		while (iter.hasNext()) {
 			File inFile = iter.next();

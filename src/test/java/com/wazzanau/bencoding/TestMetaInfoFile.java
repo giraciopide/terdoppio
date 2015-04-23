@@ -13,7 +13,7 @@ import com.wazzanau.terdoppio.metainfo.MetaInfoFile;
 public class TestMetaInfoFile {
 
 	@Test
-	public void test() throws DecodingException, IOException {
+	public void testReadMetaInfoFilesWithoutExceptions() throws DecodingException, IOException {
 			
 		Iterator<File> iter = FileUtils.iterateFiles(new File("src/test/resources/torrents"), new String[] {"torrent"}, false);
 		while (iter.hasNext()) {

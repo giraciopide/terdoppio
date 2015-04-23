@@ -1,31 +1,32 @@
 package com.wazzanau.terdoppio.trackerclient.udp;
 
 import java.nio.ByteBuffer;
-import java.util.Random;
+
 
 /**
- * Offset  Size            Name            Value
-		0       64-bit integer  connection_id   0x41727101980
-		8       32-bit integer  action          0 // connect
-		12      32-bit integer  transaction_id
-		16
-
+ * Represents the client connect request.
  */
 public class ConnectRequest {
-
-	private static final Random rnd = new Random();
-	private final long connectionId = 0x41727101980L;
+	private final long connectionId = UdpTrackerProtocol.CONNECT_REQUEST_CONNECTION_ID;
 	private final int action = UdpTrackerProtocol.ACTION_CONNECT;
 	private final int transactionId;
 	
-	public ConnectRequest(int transactionId) {
-		this.transactionId = transactionId;
-	}
-	
 	public ConnectRequest() {
-		transactionId = rnd.nextInt();
+		transactionId = UdpTrackerProtocol.nextRandomTransactionId();
 	}
-	
+		
+	public int getTransactionId() {
+		return transactionId;
+	}
+ 
+	/*
+	   Offset  Size            Name            Value
+			0       64-bit integer  connection_id   0x41727101980
+			8       32-bit integer  action          0 // connect
+			12      32-bit integer  transaction_id
+			16
+
+	 */
 	public byte[] encode() {
 		ByteBuffer buf = ByteBuffer.allocate(16);
 		buf.putLong(connectionId);

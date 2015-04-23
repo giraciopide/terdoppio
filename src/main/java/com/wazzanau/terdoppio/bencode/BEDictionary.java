@@ -8,15 +8,22 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+/**
+ * Dictionaries are encoded as a 'd' followed by a list of alternating keys and their corresponding values 
+ * followed by an 'e'. For example, d3:cow3:moo4:spam4:eggse corresponds to {'cow': 'moo', 'spam': 'eggs'} 
+ * and d4:spaml1:a1:bee corresponds to {'spam': ['a', 'b']}. Keys must be strings and appear in sorted order 
+ * (sorted as raw strings, not alphanumerics).
+ */
 public class BEDictionary implements BEValue, Map<BEString, BEValue> {
 	
 	private final static String DBL_QUOTE = "\"";
 	
 	/**
-	 * Dictionaries are encoded as a 'd' followed by a list of alternating keys and their corresponding values 
-	 * followed by an 'e'. For example, d3:cow3:moo4:spam4:eggse corresponds to {'cow': 'moo', 'spam': 'eggs'} 
-	 * and d4:spaml1:a1:bee corresponds to {'spam': ['a', 'b']}. Keys must be strings and appear in sorted order 
-	 * (sorted as raw strings, not alphanumerics).
+	 * The inner dictionary is a Tree map because of the requirement of key ordering in the protocol.
+	 * 
+	 * The supplied Comparator sorts dict key as "raw strings" as mandated by the bit torrent spec.
+	 * Probably the constraint on key ordering is to guarantee a unique encoded representation of dictionaries
+	 * so that calculating hashes on top of it makes sense.
 	 */
 	private final Map<BEString, BEValue> dictionary = new TreeMap<BEString, BEValue>(new Comparator<BEString>() {
 		@Override
@@ -167,7 +174,7 @@ public class BEDictionary implements BEValue, Map<BEString, BEValue> {
 	
 	@Override
 	public BEString asString() {
-		throw new ClassCastException("Cannot bring a BEDictionary to a BEString");
+		throw new ClassCastException("Cannot transform BEDictionary to BEString");
 	}
 
 	@Override
@@ -177,12 +184,12 @@ public class BEDictionary implements BEValue, Map<BEString, BEValue> {
 
 	@Override
 	public BEList asList() {
-		throw new ClassCastException("Cannot bring a BEDictionary to a BEList");
+		throw new ClassCastException("Cannot transform a BEDictionary to BEList");
 	}
 
 	@Override
 	public BEInteger asInt() {
-		throw new ClassCastException("Cannot bring a BEDictionary to a BEInteger");
+		throw new ClassCastException("Cannot transform a BEDictionary to BEInteger");
 	}
 	
 	//
