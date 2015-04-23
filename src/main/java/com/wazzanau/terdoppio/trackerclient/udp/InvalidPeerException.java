@@ -2,6 +2,11 @@ package com.wazzanau.terdoppio.trackerclient.udp;
 
 public class InvalidPeerException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public InvalidPeerException() {
 	}
 

@@ -38,14 +38,12 @@ public class ConnectResponse {
 		if (buf.remaining() < UdpTrackerProtocol.MIN_CONNECT_RESPONSE_LEN) {
 			throw new DecodingException("Connect response message should be at least " + UdpTrackerProtocol.MIN_CONNECT_RESPONSE_LEN + " bytes long");
 		}
-		
-		// getting the action
+
 		int action = buf.getInt();
 		if (action != UdpTrackerProtocol.ACTION_CONNECT) {
 			throw new DecodingException("Expected action CONNECT (" + Integer.toHexString(UdpTrackerProtocol.ACTION_CONNECT) + ") but got: (" + Integer.toHexString(action) + ")");
 		}
-		
-		// getting transaction id and connection id
+
 		int transactionId = buf.getInt();
 		long connectionId = buf.getLong();
 		

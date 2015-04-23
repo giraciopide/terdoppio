@@ -11,7 +11,7 @@ public class AnnounceRequestBuilder {
 	private String ipAddress;
 	private int key;
 	private int numWant = -1;
-	private short port; 
+	private int port; 
 	
 	public AnnounceRequest build() {
 		return new AnnounceRequest(connectionId,
@@ -67,7 +67,7 @@ public class AnnounceRequestBuilder {
 		this.numWant = numWant;
 	}
 
-	public void setPort(short port) {
+	public void setPort(int port) {
 		this.port = port;
 	}
 }

@@ -7,9 +7,9 @@ import java.util.Arrays;
 
 public class Peer {
 	private final byte[] ipAddress;
-	private final short tcpPort;
+	private final int tcpPort;
 	
-	public Peer(byte[] ipAddress, short tcpPort) throws InvalidPeerException {
+	public Peer(byte[] ipAddress, int tcpPort) throws InvalidPeerException {
 		this.ipAddress = ipAddress;
 		
 		if (!isValidIpAddress(ipAddress)) {
@@ -23,7 +23,7 @@ public class Peer {
 		return ipAddress;
 	}
 		
-	public short getTcpPort() {
+	public int getTcpPort() {
 		return tcpPort;
 	}
 	
@@ -40,7 +40,7 @@ public class Peer {
 	public byte[] encode() {
 		ByteBuffer buf = ByteBuffer.allocate(6); // 4 bytes for address, 2 for port
 		buf.put(ipAddress);
-		buf.putShort(tcpPort);
+		buf.putShort((short) tcpPort);
 		return buf.array();
 	}
 }
