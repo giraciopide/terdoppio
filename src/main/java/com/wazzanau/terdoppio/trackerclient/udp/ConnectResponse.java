@@ -28,11 +28,13 @@ public class ConnectResponse {
 	}
 
 	/*
-	Offset  Size            Name            Value
-		0       32-bit integer  action          0 // connect
-		4       32-bit integer  transaction_id
-		8       64-bit integer  connection_id
-		16
+		Offset      Size            Name            Value
+		0           32-bit integer  action          2 // scrape
+		4           32-bit integer  transaction_id
+		8 + 12 * n  32-bit integer  seeders
+		12 + 12 * n 32-bit integer  completed
+		16 + 12 * n 32-bit integer  leechers
+		8 + 12 * N
 	*/
 	public static ConnectResponse decode(ByteBuffer buf) throws DecodingException {
 		if (buf.remaining() < UdpTrackerProtocol.MIN_CONNECT_RESPONSE_LEN) {

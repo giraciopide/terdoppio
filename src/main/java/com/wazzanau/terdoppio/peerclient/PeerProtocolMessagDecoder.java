@@ -24,11 +24,9 @@ import com.wazzanau.terdoppio.peerclient.messages.UnChoke;
 
 public class PeerProtocolMessagDecoder extends ByteToMessageDecoder {
 	
-	// if 0, we are reading the 4 byte length header.
 	private boolean readingLen = true;
 	private int msgLen = 0;
 
-	
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 		ByteBuf buf = in.order(ByteOrder.BIG_ENDIAN);
@@ -45,20 +43,20 @@ public class PeerProtocolMessagDecoder extends ByteToMessageDecoder {
 		} 
 		
 		if (!readingLen && in.readableBytes() >= msgLen) {
-			PeerMessage msg = decodeNextMessage(buf, msgLen);
+			PeerMessage msg = decodeMessage(buf, msgLen);
 			out.add(msg);
 			readingLen = true;
 		}
 	}
 	
 	/**
-	 * 
+	 * Decods a message with the given msgLen from the ByteBuf.
 	 * @param buf
 	 * @param msgLen - including the message id.
 	 * @return
 	 * @throws DecodingException 
 	 */
-	private PeerMessage decodeNextMessage(ByteBuf buf, int msgLen) throws DecodingException {
+	private static PeerMessage decodeMessage(ByteBuf buf, int msgLen) throws DecodingException {
 		int messageType = buf.readUnsignedByte();
 		
 		PeerMessage msg = null;
@@ -111,7 +109,7 @@ public class PeerProtocolMessagDecoder extends ByteToMessageDecoder {
 		}
 			
 		case PeerMessageType.MSG_ID_PIECE: {
-			validateMsgLenEqualOrGreaterThan(this.msgLen, 9);
+			validateMsgLenEqualOrGreaterThan(msgLen, 9);
 			int index = readIntOrFail(buf, "reading index from piece message");
 			int begin = readIntOrFail(buf, "reading index from piece message");
 			int blockLen = msgLen - 1 - 4 - 4; // id, index, begin
@@ -157,7 +155,7 @@ public class PeerProtocolMessagDecoder extends ByteToMessageDecoder {
 	 * @param actualMsgLen
 	 * @throws DecodingException 
 	 */
-	private void validateMsgLenEquals(long actualMsgLen, long expectedMsgLen) throws DecodingException {
+	private static void validateMsgLenEquals(long actualMsgLen, long expectedMsgLen) throws DecodingException {
 		if (expectedMsgLen != actualMsgLen) {
 			throw new DecodingException("Unexpected msg len: expected [" + expectedMsgLen + "] actual [" + actualMsgLen + "]");
 		}
@@ -169,7 +167,7 @@ public class PeerProtocolMessagDecoder extends ByteToMessageDecoder {
 	 * @param actualMsgLen
 	 * @throws DecodingException 
 	 */
-	private void validateMsgLenEqualOrGreaterThan(long actualMsgLen, long minExpectedLen) throws DecodingException {
+	private static void validateMsgLenEqualOrGreaterThan(long actualMsgLen, long minExpectedLen) throws DecodingException {
 		if (actualMsgLen < minExpectedLen) {
 			throw new DecodingException("Unexpected msg len: expected [" + actualMsgLen + "] should be greater than [" + minExpectedLen + "]");
 		}

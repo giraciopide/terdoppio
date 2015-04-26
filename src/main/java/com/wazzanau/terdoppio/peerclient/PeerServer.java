@@ -17,28 +17,30 @@ public class PeerServer {
         this.port = port;
     }
 
-    public void run() throws Exception {
+    public void run() throws InterruptedException  {
         EventLoopGroup bossGroup = new NioEventLoopGroup(); // (1)
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
-            ServerBootstrap b = new ServerBootstrap(); // (2)
-            b.group(bossGroup, workerGroup)
+            ServerBootstrap boostrap = new ServerBootstrap(); // (2)
+            boostrap.group(bossGroup, workerGroup)
              .channel(NioServerSocketChannel.class) // (3)
              .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
                  @Override
                  public void initChannel(SocketChannel ch) throws Exception {
                      ch.pipeline().addLast(new HandshakeHandler());
+                     ch.pipeline().addLast(new PeerProtocolMessagDecoder());
                  }
              })
              .option(ChannelOption.SO_BACKLOG, 128)          // (5)
              .childOption(ChannelOption.SO_KEEPALIVE, true); // (6)
 
             // Bind and start to accept incoming connections.
-            ChannelFuture f = b.bind(port).sync(); // (7)
+            ChannelFuture f = boostrap.bind(port).sync(); // (7)
 
             // Wait until the server socket is closed.
             // In this example, this does not happen, but you can do that to gracefully
             // shut down your server.
+ 
             f.channel().closeFuture().sync();
         } finally {
             workerGroup.shutdownGracefully();
@@ -46,7 +48,7 @@ public class PeerServer {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws InterruptedException {
         int port;
         if (args.length > 0) {
             port = Integer.parseInt(args[0]);

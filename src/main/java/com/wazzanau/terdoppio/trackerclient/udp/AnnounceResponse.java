@@ -35,7 +35,6 @@ public class AnnounceResponse {
 			20 + 6 * n  32-bit integer  IP address
 			24 + 6 * n  16-bit integer  TCP port
 			20 + 6 * N
-
 	 */
 	public static AnnounceResponse decode(ByteBuffer buf) throws DecodingException {
 		if (buf.remaining() < UdpTrackerProtocol.MIN_ANNOUNCE_RESPONSE_LEN) {
