@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+import java.nio.ByteOrder;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -36,8 +37,8 @@ public class HandshakeHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) {
-		ByteBuf in = (ByteBuf) msg;
-
+		ByteBuf in = ((ByteBuf) msg).order(ByteOrder.BIG_ENDIAN);
+		
 		if (handshaking) {
 			if (!readingHandshakeBody) { // we're not reading the pstr string yet.
 				pstrlen = in.readUnsignedByte();

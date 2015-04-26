@@ -1,9 +1,11 @@
 package com.wazzanau.terdoppio.peerclient.messages;
 
 public class Interested extends PeerMessage {
-
-	public Interested() {
-		super(PeerMessageType.NOT_INTERESTED);
+	
+	public final static Interested MESSAGE = new Interested();
+	
+	private Interested() {
+		super(PeerMessageType.INTERESTED);
 	}
 
 }

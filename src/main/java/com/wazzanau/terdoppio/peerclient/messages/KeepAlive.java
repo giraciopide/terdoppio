@@ -1,8 +1,11 @@
 package com.wazzanau.terdoppio.peerclient.messages;
 
 public class KeepAlive extends PeerMessage {
-
-	public KeepAlive() {
+	
+	// Message is so simple that we use always the same instance
+	public static final KeepAlive MESSAGE = new KeepAlive();
+	
+	private KeepAlive() {
 		super(PeerMessageType.KEEP_ALIVE);
 	}
 
