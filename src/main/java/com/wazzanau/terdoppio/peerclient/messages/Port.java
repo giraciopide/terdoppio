@@ -4,9 +4,9 @@ public class Port extends PeerMessage {
 	
 	private final int port;
 
-	public Port(int pieceIndex) {
+	public Port(int dhtListenPort) {
 		super(PeerMessageType.PORT);
-		this.port = pieceIndex;
+		this.port = dhtListenPort;
 	}
 
 	public int getPieceIndex() {
