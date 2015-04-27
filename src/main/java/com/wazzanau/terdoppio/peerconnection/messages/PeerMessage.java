@@ -1,4 +1,4 @@
-package com.wazzanau.terdoppio.peerclient.messages;
+package com.wazzanau.terdoppio.peerconnection.messages;
 
 public abstract class PeerMessage {
 	

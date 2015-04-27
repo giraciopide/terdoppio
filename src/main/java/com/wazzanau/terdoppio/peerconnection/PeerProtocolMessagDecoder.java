@@ -8,19 +8,19 @@ import java.nio.ByteOrder;
 import java.util.List;
 
 import com.wazzanau.terdoppio.bencode.DecodingException;
-import com.wazzanau.terdoppio.peerclient.messages.BitField;
-import com.wazzanau.terdoppio.peerclient.messages.Cancel;
-import com.wazzanau.terdoppio.peerclient.messages.Choke;
-import com.wazzanau.terdoppio.peerclient.messages.Have;
-import com.wazzanau.terdoppio.peerclient.messages.Interested;
-import com.wazzanau.terdoppio.peerclient.messages.KeepAlive;
-import com.wazzanau.terdoppio.peerclient.messages.NotInterested;
-import com.wazzanau.terdoppio.peerclient.messages.PeerMessage;
-import com.wazzanau.terdoppio.peerclient.messages.PeerMessageType;
-import com.wazzanau.terdoppio.peerclient.messages.Piece;
-import com.wazzanau.terdoppio.peerclient.messages.Port;
-import com.wazzanau.terdoppio.peerclient.messages.Request;
-import com.wazzanau.terdoppio.peerclient.messages.UnChoke;
+import com.wazzanau.terdoppio.peerconnection.messages.BitField;
+import com.wazzanau.terdoppio.peerconnection.messages.Cancel;
+import com.wazzanau.terdoppio.peerconnection.messages.Choke;
+import com.wazzanau.terdoppio.peerconnection.messages.Have;
+import com.wazzanau.terdoppio.peerconnection.messages.Interested;
+import com.wazzanau.terdoppio.peerconnection.messages.KeepAlive;
+import com.wazzanau.terdoppio.peerconnection.messages.NotInterested;
+import com.wazzanau.terdoppio.peerconnection.messages.PeerMessage;
+import com.wazzanau.terdoppio.peerconnection.messages.PeerMessageType;
+import com.wazzanau.terdoppio.peerconnection.messages.Piece;
+import com.wazzanau.terdoppio.peerconnection.messages.Port;
+import com.wazzanau.terdoppio.peerconnection.messages.Request;
+import com.wazzanau.terdoppio.peerconnection.messages.UnChoke;
 
 public class PeerProtocolMessagDecoder extends ByteToMessageDecoder {
 	
