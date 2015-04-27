@@ -1,4 +1,4 @@
-package com.wazzanau.terdoppio.peerclient;
+package com.wazzanau.terdoppio.peerconnection;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

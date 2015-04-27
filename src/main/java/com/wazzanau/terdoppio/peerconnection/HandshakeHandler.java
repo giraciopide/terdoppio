@@ -1,4 +1,4 @@
-package com.wazzanau.terdoppio.peerclient;
+package com.wazzanau.terdoppio.peerconnection;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
