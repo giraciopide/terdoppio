@@ -1,4 +1,4 @@
-package com.wazzanau.terdoppio.trackerclient.udp;
+package com.wazzanau.terdoppio.trackerconnection.udp;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.wazzanau.terdoppio.bencode.DecodingException;
-import com.wazzanau.terdoppio.trackerclient.http.ByteUtils;
-import com.wazzanau.terdoppio.trackerclient.udp.ScrapeResponse.ScrapeInfo;
+import com.wazzanau.terdoppio.trackerconnection.http.ByteUtils;
+import com.wazzanau.terdoppio.trackerconnection.udp.ScrapeResponse.ScrapeInfo;
 
 
 

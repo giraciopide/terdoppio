@@ -1,4 +1,4 @@
-package com.wazzanau.terdoppio.trackerclient.udp;
+package com.wazzanau.terdoppio.trackerconnection.udp;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;

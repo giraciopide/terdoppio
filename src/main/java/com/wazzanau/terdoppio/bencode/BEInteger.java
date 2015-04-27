@@ -8,9 +8,6 @@ import java.nio.ByteBuffer;
  * limitation. i-0e is invalid. 
  * All encodings with a leading zero, such as i03e, are invalid, other than i0e, 
  * which of course corresponds to 0.
- * 
- * @author marco
- *
  */
 public class BEInteger implements BEValue {
 

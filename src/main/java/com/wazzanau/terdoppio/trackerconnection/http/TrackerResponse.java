@@ -1,4 +1,4 @@
-package com.wazzanau.terdoppio.trackerclient.http;
+package com.wazzanau.terdoppio.trackerconnection.http;
 
 import java.util.ArrayList;
 import java.util.Collection;

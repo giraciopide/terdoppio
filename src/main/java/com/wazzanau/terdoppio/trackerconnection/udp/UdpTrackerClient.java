@@ -1,4 +1,4 @@
-package com.wazzanau.terdoppio.trackerclient.udp;
+package com.wazzanau.terdoppio.trackerconnection.udp;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;

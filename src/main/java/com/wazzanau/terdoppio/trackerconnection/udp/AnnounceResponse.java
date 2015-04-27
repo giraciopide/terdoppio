@@ -1,4 +1,4 @@
-package com.wazzanau.terdoppio.trackerclient.udp;
+package com.wazzanau.terdoppio.trackerconnection.udp;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;

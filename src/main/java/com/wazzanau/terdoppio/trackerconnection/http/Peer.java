@@ -1,9 +1,9 @@
-package com.wazzanau.terdoppio.trackerclient.http;
+package com.wazzanau.terdoppio.trackerconnection.http;
 
 import com.wazzanau.terdoppio.bencode.BEDictionary;
 import com.wazzanau.terdoppio.bencode.BEValue;
 import com.wazzanau.terdoppio.bencode.DecodingException;
-import com.wazzanau.terdoppio.trackerclient.http.ByteUtils.Endianess;
+import com.wazzanau.terdoppio.trackerconnection.http.ByteUtils.Endianess;
 
 //peers: (dictionary model) The value is a list of dictionaries, each with the following keys:
 	//    peer id: peer's self-selected ID, as described above for the tracker request (string)

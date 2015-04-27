@@ -17,7 +17,7 @@ import com.wazzanau.terdoppio.bencode.BEDictionary;
 import com.wazzanau.terdoppio.bencode.BEncoding;
 import com.wazzanau.terdoppio.bencode.DecodingException;
 import com.wazzanau.terdoppio.metainfo.MetaInfoFile;
-import com.wazzanau.terdoppio.trackerclient.http.ByteUtils;
+import com.wazzanau.terdoppio.trackerconnection.http.ByteUtils;
 
 public class BEDictionaryTest {
 	
