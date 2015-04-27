@@ -40,6 +40,10 @@ public class ByteUtils {
 		return readUInt32(num, 0, endianess);
 	}
 	
+	public static long getUInt32(int signedInt) {
+		return signedInt & 0x00000000ffffffffL;
+	}
+	
 	public static long readUInt32(byte[] num, int offset, Endianess endianess) {
 		long out = 0;
 		switch (endianess) {

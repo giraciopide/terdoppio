@@ -41,10 +41,10 @@ public class AnnounceResponse {
 			throw new DecodingException("Announce response message should be at least " + UdpTrackerProtocol.MIN_CONNECT_RESPONSE_LEN + " bytes long");
 		}
 		
-		// action should be ANNOUNCE (1)
+		// action should be SCRAPE (2)
 		int action = buf.getInt();
-		if (action != UdpTrackerProtocol.ACTION_ANNOUNCE) {
-			throw new DecodingException("Expected action ANNOUNCE (" + Integer.toHexString(UdpTrackerProtocol.ACTION_ANNOUNCE) + ") but got: (" + Integer.toHexString(action) + ")");
+		if (action != UdpTrackerProtocol.ACTION_SCRAPE) {
+			throw new DecodingException("Expected action SCRAPE (" + Integer.toHexString(UdpTrackerProtocol.ACTION_SCRAPE) + ") but got: (" + Integer.toHexString(action) + ")");
 		}
 		
 		int transactionId = buf.getInt();

@@ -14,6 +14,7 @@ public final class UdpTrackerProtocol {
 	public static int EVENT_STOPPED = 3;
 	
 	public static int MIN_CONNECT_RESPONSE_LEN = 16;
+	public static int MIN_SCRAPE_RESPONSE_LEN = 8;
 	public static int MIN_ANNOUNCE_RESPONSE_LEN = 20;
 	
 	public static int INFO_HASH_LEN = 20;
