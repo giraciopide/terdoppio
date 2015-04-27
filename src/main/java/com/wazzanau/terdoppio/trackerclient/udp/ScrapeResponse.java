@@ -14,7 +14,7 @@ import com.wazzanau.terdoppio.trackerclient.udp.ScrapeResponse.ScrapeInfo;
 /**
  * Represents the udp tracker response.
  */
-public class ScrapeResponse implements Iterable<ScrapeInfo> {
+public class ScrapeResponse implements Iterable<ScrapeInfo>, Response {
 
 	private final int transactionId;
 	private final List<ScrapeInfo> scrapedInfo;
@@ -24,6 +24,7 @@ public class ScrapeResponse implements Iterable<ScrapeInfo> {
 		this.scrapedInfo = scrapedInfo;
 	}
 	
+	@Override
 	public int getTransactionId() {
 		return transactionId;
 	}
@@ -60,9 +61,9 @@ public class ScrapeResponse implements Iterable<ScrapeInfo> {
 		
 		List<ScrapeInfo> scrapedInfo = new ArrayList<ScrapeInfo>();
 		while (buf.hasRemaining()) {
-			long seeders = ByteUtils.getUInt32(buf.getInt());
-			long completed = ByteUtils.getUInt32(buf.getInt());
-			long leechers = ByteUtils.getUInt32(buf.getInt());
+			long seeders = ByteUtils.toUInt32(buf.getInt());
+			long completed = ByteUtils.toUInt32(buf.getInt());
+			long leechers = ByteUtils.toUInt32(buf.getInt());
 			scrapedInfo.add(new ScrapeInfo(seeders, completed, leechers));
 		}
 		

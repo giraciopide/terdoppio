@@ -9,7 +9,7 @@ import com.wazzanau.terdoppio.bencode.DecodingException;
 /**
  * Represents the udp tracker response.
  */
-public class ConnectResponse {
+public class ConnectResponse implements Response {
 
 	private final int transactionId;
 	private final long connectionId;
@@ -19,6 +19,7 @@ public class ConnectResponse {
 		this.connectionId = connectionId;
 	}
 	
+	@Override
 	public int getTransactionId() {
 		return transactionId;
 	}

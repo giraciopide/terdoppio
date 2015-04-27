@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.wazzanau.terdoppio.bencode.DecodingException;
 
-public class AnnounceResponse {
+public class AnnounceResponse implements Response {
 
 	private final int transactionId;
 	private final int interval;
@@ -73,6 +73,7 @@ public class AnnounceResponse {
 		return new AnnounceResponse(transactionId, interval, leechers, seeders, peers);
 	}
 
+	@Override
 	public int getTransactionId() {
 		return transactionId;
 	}

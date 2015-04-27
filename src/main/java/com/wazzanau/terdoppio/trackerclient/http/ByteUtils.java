@@ -4,21 +4,47 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class ByteUtils {
-	
+		
 	public static enum Endianess {
 		BIG_ENDIAN,
 		LITTLE_ENDIAN
 	}
 	
-	public static int readUint8(byte b) {
+	/**
+	 * Converts a java byte (signed 8 bit) to an int containing the unsigned byte representation 
+	 * @param b
+	 * @return an int where the value of the given signed byte is interpreted as unsigned byte
+	 */
+	public static int toUint8(byte b) {
 		return (int)b & 0xFF;
 	}
 	
-	public static int readUint16(byte[] num, Endianess endianess) {
-		return readUint16(num, 0, endianess);
+	/**
+	 * Converts a java short (16 bit) (which is always signed) to an int with containing the unsigned short representation
+	 * @param signedShort
+	 * @return an int where the value of the given signed short is interpreted as unsigned short
+	 */
+	public static int toUInt16(short signedShort) {
+		return signedShort & 0x0000ffff;
 	}
 	
-	public static int readUint16(byte[] num, int offset, Endianess endianess) {
+	/**
+	 * Converts a java int (signed 32 bit) to a long containing the unsigned int representation 
+	 * @param signedInt
+	 * @return an int where the value of the given signed short is interpreted as unsigned short
+	 */
+	public static long toUInt32(int signedInt) {
+		return signedInt & 0x00000000ffffffffL;
+	}
+	
+	/**
+	 * Reads an UInt16 from a byte array into a java int.
+	 * @param num
+	 * @param offset
+	 * @param endianess
+	 * @return
+	 */
+	public static int readUInt16(byte[] num, int offset, Endianess endianess) {
 		int out = 0;
 		switch (endianess) {
 		case BIG_ENDIAN:
@@ -36,14 +62,21 @@ public class ByteUtils {
 		return out;
 	}
 	
+	public static int readUInt16(byte[] num, Endianess endianess) {
+		return readUInt16(num, 0, endianess);
+	}
+	
 	public static long readUInt32(byte[] num, Endianess endianess) {
 		return readUInt32(num, 0, endianess);
 	}
 	
-	public static long getUInt32(int signedInt) {
-		return signedInt & 0x00000000ffffffffL;
-	}
-	
+	/**
+	 * Reads an UInt32 from a byte array into a java long.
+	 * @param num
+	 * @param offset
+	 * @param endianess
+	 * @return
+	 */
 	public static long readUInt32(byte[] num, int offset, Endianess endianess) {
 		long out = 0;
 		switch (endianess) {

@@ -50,7 +50,7 @@ public class Peer {
 		String ip = ByteUtils.readIPv4fromUInt32(ipv4);
 		
 		// byte 5 and 6 are an UInt16 that represents the port
-		int port = ByteUtils.readUint16(bytes, offset + 4, Endianess.BIG_ENDIAN);
+		int port = ByteUtils.readUInt16(bytes, offset + 4, Endianess.BIG_ENDIAN);
 		
 		// sadly in compact form, there's no peer id.
 		return new Peer(ip + ":" + port, ip, port);
