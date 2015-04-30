@@ -5,11 +5,13 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-public class Peer {
+import com.wazzanau.terdoppio.trackerconnection.Peer;
+
+public class UdpPeer implements Peer {
 	private final byte[] ipAddress;
 	private final int tcpPort;
 	
-	public Peer(byte[] ipAddress, int tcpPort) throws InvalidPeerException {
+	public UdpPeer(byte[] ipAddress, int tcpPort) throws InvalidPeerException {
 		this.ipAddress = ipAddress;
 		
 		if (!isValidIpAddress(ipAddress)) {
@@ -19,10 +21,18 @@ public class Peer {
 		this.tcpPort = tcpPort;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.wazzanau.terdoppio.trackerconnection.udp.Peer#getIpAddress()
+	 */
+	@Override
 	public byte[] getIpAddress() {
 		return ipAddress;
 	}
 		
+	/* (non-Javadoc)
+	 * @see com.wazzanau.terdoppio.trackerconnection.udp.Peer#getTcpPort()
+	 */
+	@Override
 	public int getTcpPort() {
 		return tcpPort;
 	}
@@ -42,5 +52,14 @@ public class Peer {
 		buf.put(ipAddress);
 		buf.putShort((short) tcpPort);
 		return buf.array();
+	}
+
+	@Override
+	public String getPeerId() {
+		try {
+			return Inet4Address.getByAddress(ipAddress).toString();
+		} catch (UnknownHostException e) {
+			return ipAddress + ":" + tcpPort;
+		}
 	}
 }

@@ -13,11 +13,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import com.wazzanau.terdoppio.ByteUtils;
 import com.wazzanau.terdoppio.bencode.BEDictionary;
 import com.wazzanau.terdoppio.bencode.BEncoding;
 import com.wazzanau.terdoppio.bencode.DecodingException;
 import com.wazzanau.terdoppio.metainfo.MetaInfoFile;
-import com.wazzanau.terdoppio.trackerconnection.http.ByteUtils;
 
 public class BEDictionaryTest {
 	

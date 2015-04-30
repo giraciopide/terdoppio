@@ -8,16 +8,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.wazzanau.terdoppio.bencode.DecodingException;
+import com.wazzanau.terdoppio.trackerconnection.AnnounceResponse;
+import com.wazzanau.terdoppio.trackerconnection.Peer;
 
-public class AnnounceResponse implements Response {
+public class UdpAnnounceResponse implements Response, AnnounceResponse {
 
 	private final int transactionId;
-	private final int interval;
+	private final long interval;
 	private final int leechers;
 	private final int seeders;
 	private final List<Peer> peers;
 	
-	private AnnounceResponse(int transactionId, int interval, int leechers, int seeders, List<Peer> peers) {
+	private UdpAnnounceResponse(int transactionId, long interval, int leechers, int seeders, List<Peer> peers) {
 		this.transactionId = transactionId;
 		this.interval = interval;
 		this.leechers = leechers;
@@ -58,9 +60,9 @@ public class AnnounceResponse implements Response {
 				byte[] ip = new byte[4];
 				buf.get(ip);
 				int port = Short.toUnsignedInt(buf.getShort());
-				Peer peer = null;
+				UdpPeer peer = null;
 				try {
-					peer = new Peer(ip, port);
+					peer = new UdpPeer(ip, port);
 				} catch (InvalidPeerException e) {
 					// ignore this peer. 
 				}
@@ -70,7 +72,7 @@ public class AnnounceResponse implements Response {
 			throw new DecodingException(e);
 		}
 			
-		return new AnnounceResponse(transactionId, interval, leechers, seeders, peers);
+		return new UdpAnnounceResponse(transactionId, interval, leechers, seeders, peers);
 	}
 
 	@Override
@@ -78,18 +80,32 @@ public class AnnounceResponse implements Response {
 		return transactionId;
 	}
 
-	public int getInterval() {
+	/* (non-Javadoc)
+	 * @see com.wazzanau.terdoppio.trackerconnection.udp.AnnounceResponse#getInterval()
+	 */
+	@Override
+	public long getInterval() {
 		return interval;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.wazzanau.terdoppio.trackerconnection.udp.AnnounceResponse#getLeechers()
+	 */
 	public int getLeechers() {
 		return leechers;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.wazzanau.terdoppio.trackerconnection.udp.AnnounceResponse#getSeeders()
+	 */
 	public int getSeeders() {
 		return seeders;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.wazzanau.terdoppio.trackerconnection.udp.AnnounceResponse#getPeers()
+	 */
+	@Override
 	public List<Peer> getPeers() {
 		return Collections.unmodifiableList(peers);
 	}

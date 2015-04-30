@@ -15,12 +15,12 @@ import io.netty.handler.logging.LoggingHandler;
 
 import java.net.InetSocketAddress;
 
-public class UdpTrackerClient implements Runnable {
+public class UdpTrackerConnection implements Runnable {
 
 	private final String host; 
 	private final int port;
 
-	public UdpTrackerClient(String host, int port) {
+	public UdpTrackerConnection(String host, int port) {
 		this.host = host;
 		this.port = port;
 	}
@@ -80,16 +80,15 @@ public class UdpTrackerClient implements Runnable {
 	// 
 	//
 
-	public void announce(AnnounceRequest request, TrackerResponseHandler<AnnounceResponse> responseHandler) {
+	public void announce(AnnounceRequest request, TrackerResponseHandler<UdpAnnounceResponse> responseHandler) {
 		ByteBuf requestBytes = Unpooled.copiedBuffer(request.encode());
 
 		channel.writeAndFlush(new DatagramPacket(requestBytes, new InetSocketAddress(host, port)));
 
-		ResponseHandler<AnnounceResponse> handler = new ResponseHandler<AnnounceResponse>(request.getTransactionId(), responseHandler);
+		ResponseHandler<UdpAnnounceResponse> handler = new ResponseHandler<UdpAnnounceResponse>(request.getTransactionId(), responseHandler);
 		channel.pipeline().addLast(handler);
 	}
-	
-	
+		
 
 	/**
 	 * A netty handler that reads a reply to its own transaction and subsequently

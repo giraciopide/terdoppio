@@ -1,14 +1,16 @@
 package com.wazzanau.terdoppio.trackerconnection.http;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.wazzanau.terdoppio.bencode.BEDictionary;
 import com.wazzanau.terdoppio.bencode.BEValue;
 import com.wazzanau.terdoppio.bencode.DecodingException;
+import com.wazzanau.terdoppio.trackerconnection.AnnounceResponse;
+import com.wazzanau.terdoppio.trackerconnection.Peer;
 
-public class TrackerResponse {
+public class HTTPTrackerResponse implements AnnounceResponse {
 
 	// failure reason: If present, then no other keys may be present. The value is a human-readable error message as to why the request failed (string).
 	// warning message: (new, optional) Similar to failure reason, but the response still gets processed normally. The warning message is shown just like an error.
@@ -39,12 +41,12 @@ public class TrackerResponse {
 	private String trackerId;
 	private long complete;
 	private long incomplete;
-	private Collection<Peer> peers = new ArrayList<Peer>(50);
+	private List<Peer> peers = new ArrayList<Peer>(50);
 
-	private TrackerResponse() { }
+	private HTTPTrackerResponse() { }
 
-	public static TrackerResponse fromDict(BEDictionary dict) throws DecodingException {
-		TrackerResponse response = new TrackerResponse();
+	public static HTTPTrackerResponse fromDict(BEDictionary dict) throws DecodingException {
+		HTTPTrackerResponse response = new HTTPTrackerResponse();
 
 		BEValue failureReason = dict.get(KEY_FAILURE_REASON);
 		if (failureReason != null) {
@@ -82,13 +84,12 @@ public class TrackerResponse {
 			response.incomplete = incomplete.asInt().get();
 		}
 
-		// Collection<Peer> peers = new ArrayList<Peer>();
 		BEValue peersValue = dict.get(KEY_PEERS);
 		List<Peer> peers = new ArrayList<Peer>();
 		switch (peersValue.getType()) {
 		case LIST: // list of dictionaries
 			for (BEValue item: peersValue.asList()) {
-				peers.add(Peer.fromDict(item.asDict()));
+				peers.add(HTTPPeer.fromDict(item.asDict()));
 			}
 			break;
 		case STRING: // multiple of 6 bytes string
@@ -99,7 +100,7 @@ public class TrackerResponse {
 			
 			// 6 bytes, 4 for ipv4 (UInt32), 2 for port (UInt16).
 			for (int offset = 0; offset < peersBytes.length; offset += 6) {
-				peers.add(Peer.fromBytes(peersBytes, offset));
+				peers.add(HTTPPeer.fromBytes(peersBytes, offset));
 			}
 			break;
 		case DICTIONARY:
@@ -107,6 +108,7 @@ public class TrackerResponse {
 		default:
 			throw new DecodingException("Unexpected type for key [" + KEY_PEERS + "] should be dictionary or string, was instead: " + peersValue.getType());
 		}
+		response.peers = peers;
 
 		return response;
 	}
@@ -119,10 +121,11 @@ public class TrackerResponse {
 		return warningMessage;
 	}
 
+	@Override
 	public long getInterval() {
 		return interval;
 	}
-
+	
 	public long getMinInterval() {
 		return minInterval;
 	}
@@ -139,7 +142,9 @@ public class TrackerResponse {
 		return incomplete;
 	}
 
-	public Collection<Peer> getPeers() {
-		return peers;
+	@Override
+	public List<Peer> getPeers() {
+		return Collections.unmodifiableList(peers);
 	}
+
 }

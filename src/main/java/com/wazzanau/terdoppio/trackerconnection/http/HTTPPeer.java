@@ -1,9 +1,14 @@
 package com.wazzanau.terdoppio.trackerconnection.http;
 
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
+
+import com.wazzanau.terdoppio.ByteUtils;
+import com.wazzanau.terdoppio.ByteUtils.Endianess;
 import com.wazzanau.terdoppio.bencode.BEDictionary;
 import com.wazzanau.terdoppio.bencode.BEValue;
 import com.wazzanau.terdoppio.bencode.DecodingException;
-import com.wazzanau.terdoppio.trackerconnection.http.ByteUtils.Endianess;
+import com.wazzanau.terdoppio.trackerconnection.Peer;
 
 //peers: (dictionary model) The value is a list of dictionaries, each with the following keys:
 	//    peer id: peer's self-selected ID, as described above for the tracker request (string)
@@ -11,7 +16,7 @@ import com.wazzanau.terdoppio.trackerconnection.http.ByteUtils.Endianess;
 	//    port: peer's port number (integer)
 	// peers: (binary model) Instead of using the dictionary model described above, the peers value may be a string consisting of multiples of 6 bytes. First 4 bytes are the IP address and last 2 bytes are the port number. All in network (big endian) notation.
 	
-public class Peer {
+public class HTTPPeer implements Peer {
 	
 	private static final String KEY_PEER_ID = "peer id";
 	private static final String KEY_IP = "ip";
@@ -21,13 +26,14 @@ public class Peer {
 	private final String ip;
 	private final int port;
 	
-	public Peer(String peerId, String ip, int port) {
+	public HTTPPeer(String peerId, String ip, int port) {
 		super();
 		this.peerId = peerId;
 		this.ip = ip;
 		this.port = port;
 	}
 
+	@Override
 	public String getPeerId() {
 		return peerId;
 	}
@@ -40,7 +46,7 @@ public class Peer {
 		return port;
 	}
 	
-	public static Peer fromBytes(byte[] bytes, int offset) throws DecodingException {
+	public static HTTPPeer fromBytes(byte[] bytes, int offset) throws DecodingException {
 		if (bytes.length == 6) {
 			throw new DecodingException("The compact peer list is a not a multiple of 6 (4 bytes for ipv4 address, 2 bytes for port) cannot decode");
 		}
@@ -53,7 +59,7 @@ public class Peer {
 		int port = ByteUtils.readUInt16(bytes, offset + 4, Endianess.BIG_ENDIAN);
 		
 		// sadly in compact form, there's no peer id.
-		return new Peer(ip + ":" + port, ip, port);
+		return new HTTPPeer(ip + ":" + port, ip, port);
 	}
 	
 	/**
@@ -62,7 +68,7 @@ public class Peer {
 	 * @return
 	 * @throws DecodingException
 	 */
-	public static Peer fromDict(BEDictionary dict) throws DecodingException {
+	public static HTTPPeer fromDict(BEDictionary dict) throws DecodingException {
 		BEValue ipValue = dict.get(KEY_IP);
 		if (ipValue == null) {
 			throw new DecodingException("Cannot decode: Missing key [" + KEY_IP + "]");
@@ -81,11 +87,26 @@ public class Peer {
 		
 		// we know port range fits into an int so the cast is safe.
 		int port = (int) portValue.asInt().get();
-		return new Peer(peerId, ip, port);
+		return new HTTPPeer(peerId, ip, port);
 	}
 
 	@Override
 	public String toString() {
 		return "Peer [peerId=" + peerId + ", ip=" + ip + ", port=" + port + "]";
+	}
+
+	@Override
+	public byte[] getIpAddress() {
+		try {
+			return Inet4Address.getByName(ip).getAddress();
+		} catch (UnknownHostException e) {
+			// TODO log properly
+			return null;
+		}
+	}
+
+	@Override
+	public int getTcpPort() {
+		return port;
 	}
 }

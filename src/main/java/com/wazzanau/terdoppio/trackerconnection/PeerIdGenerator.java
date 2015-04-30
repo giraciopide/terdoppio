@@ -1,4 +1,4 @@
-package com.wazzanau.terdoppio.trackerconnection.http;
+package com.wazzanau.terdoppio.trackerconnection;
 
 import java.nio.ByteBuffer;
 import java.util.Random;

@@ -1,5 +1,8 @@
-package com.wazzanau.terdoppio.trackerconnection.http;
+package com.wazzanau.terdoppio;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -109,7 +112,17 @@ public class ByteUtils {
 		return ipv4.toString();
 	}
 	
-	public static MessageDigest getSHA1Digest() {
+	public static String getIPv4(byte[] ipv4) {
+		InetAddress ip = null;
+		try {
+			ip = Inet4Address.getByAddress(ipv4);
+		} catch (UnknownHostException e) {
+		}
+		
+		return ip == null ? "invalid ip address" : ip.toString();
+	}
+	
+	private static MessageDigest getSHA1Digest() {
 		MessageDigest digest = null;
 		try {
 			digest = MessageDigest.getInstance("SHA-1");
