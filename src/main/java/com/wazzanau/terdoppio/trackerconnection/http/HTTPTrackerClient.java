@@ -26,14 +26,14 @@ import com.wazzanau.terdoppio.ByteUtils;
 import com.wazzanau.terdoppio.bencode.BEDictionary;
 import com.wazzanau.terdoppio.bencode.BEncoding;
 import com.wazzanau.terdoppio.bencode.DecodingException;
-import com.wazzanau.terdoppio.trackerconnection.TrackerConnection;
+import com.wazzanau.terdoppio.trackerconnection.TrackerClient;
 
 /**
  * A client for doing tracker HTTP request.
  * @author marco.nicolini@gmail.com
  *
  */
-public class HTTPTrackerClient extends TrackerConnection {
+public class HTTPTrackerClient extends TrackerClient {
 	
 	private static final String ANNOUNCE_PARAM_INFO_HASH = "info_hash";
 	private static final String ANNOUNCE_PARAM_PEER_ID = "peer_id";

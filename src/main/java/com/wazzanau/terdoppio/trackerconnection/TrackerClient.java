@@ -5,7 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.wazzanau.terdoppio.trackerconnection.udp.ScrapeResponse;
 
-public abstract class TrackerConnection {
+public abstract class TrackerClient {
 	
 	private final String peerId;
 	private final byte[] infoHash;
@@ -16,21 +16,21 @@ public abstract class TrackerConnection {
 	private final int port;
 	private volatile int numWant = 50;
 	private volatile String key = null;
-	private final List<TrackerConnectionListener> listeners = new CopyOnWriteArrayList<>();
+	private final List<TrackerEventListener> listeners = new CopyOnWriteArrayList<>();
 	
 	public abstract void start();
 	public abstract void stop();
 	
-	public void addTrackerConnectionListener(TrackerConnectionListener listener) {
+	public void addTrackerConnectionListener(TrackerEventListener listener) {
 		listeners.add(listener);
 	}
 	
-	public boolean removeTrackerConnectionListener(TrackerConnectionListener listener) {
+	public boolean removeTrackerConnectionListener(TrackerEventListener listener) {
 		return listeners.remove(listener);
 	}
 	
 	protected void notifyListeners(AnnounceResponse response) {
-		for (TrackerConnectionListener listener: listeners) {
+		for (TrackerEventListener listener: listeners) {
 			try {
 				listener.onAnnounceResponse(response);
 			} catch (Exception e) {
@@ -41,7 +41,7 @@ public abstract class TrackerConnection {
 	}
 	
 	protected void notifyListeners(ScrapeResponse response) {
-		for (TrackerConnectionListener listener: listeners) {
+		for (TrackerEventListener listener: listeners) {
 			try {
 				listener.onScrapeResponse(response);
 			} catch (Exception e) {
@@ -52,9 +52,9 @@ public abstract class TrackerConnection {
 	}
 	
 	protected void notifyListeners(Exception exception) {
-		for (TrackerConnectionListener listener: listeners) {
+		for (TrackerEventListener listener: listeners) {
 			try {
-				listener.onTrackerConnectionException(exception);
+				listener.onException(exception);
 			} catch (Exception e) {
 				e.printStackTrace();
 				// TODO log properly here
@@ -62,7 +62,7 @@ public abstract class TrackerConnection {
 		}
 	}
 	
-	public TrackerConnection(String peerId, byte[] infoHash, byte[] ipAddress, int port) {
+	public TrackerClient(String peerId, byte[] infoHash, byte[] ipAddress, int port) {
 		this.peerId = peerId;
 		this.infoHash = infoHash;
 		this.ipAddress = ipAddress;
