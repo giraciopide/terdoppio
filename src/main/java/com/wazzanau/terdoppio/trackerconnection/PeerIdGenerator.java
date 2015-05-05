@@ -3,7 +3,7 @@ package com.wazzanau.terdoppio.trackerconnection;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
-public class PeerIdGenerator {
+public final class PeerIdGenerator {
 	
 	private final static Random rnd = new Random();
 	public final static int idLen = 20;
@@ -36,6 +36,14 @@ public class PeerIdGenerator {
 			id.put(nextPrintableChar());
 		}
 		return id.array();
+	}
+	
+	public static String generateReadablePeerIdString() {
+		return new String(generateReadablePeerId());
+	}
+	
+	public static String generatePeerIdString() {
+		return new String(generatePeerId());
 	}
 	
 	private static byte nextPrintableChar() {

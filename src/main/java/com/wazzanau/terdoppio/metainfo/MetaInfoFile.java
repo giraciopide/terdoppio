@@ -5,13 +5,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import com.wazzanau.terdoppio.ByteUtils;
 import com.wazzanau.terdoppio.bencode.BEDictionary;
 import com.wazzanau.terdoppio.bencode.BEString;
 import com.wazzanau.terdoppio.bencode.BEValue;
 import com.wazzanau.terdoppio.bencode.BEncoding;
 import com.wazzanau.terdoppio.bencode.DecodingException;
+import com.wazzanau.terdoppio.trackerconnection.AnnounceProtocol;
 
 public class MetaInfoFile {
+	
 	private static final String KEY_ANNOUNCE = "announce";
 	private static final String KEY_INFO = "info";
 	
@@ -25,6 +28,20 @@ public class MetaInfoFile {
 	public void setAnnounce(String announce) {
 		this.announce = announce;
 	}
+	
+	public AnnounceProtocol getAnnounceProtocol() {
+		if (announce != null) {
+			if (announce.toLowerCase().startsWith("udp://")) {
+				return AnnounceProtocol.UDP;
+			} 
+			
+			if (announce.toLowerCase().startsWith("http://") || announce.toLowerCase().startsWith("https://")) {
+				return AnnounceProtocol.HTTP;
+			}
+		}
+		
+		return AnnounceProtocol.UNKNOWN;
+	}
 
 	public InfoDictionary getInfo() {
 		return info;
@@ -32,6 +49,14 @@ public class MetaInfoFile {
 
 	public void setInfo(InfoDictionary info) {
 		this.info = info;
+	}
+	
+	public byte[] getInfoHash() {
+		return ByteUtils.computeSHA1(info.asDict().encode());
+	}
+	
+	public String getInfoHashString() {
+		return new String(getInfoHash());
 	}
 	
 	public BEDictionary asDict() {
