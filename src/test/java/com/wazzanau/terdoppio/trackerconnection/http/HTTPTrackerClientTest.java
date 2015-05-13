@@ -8,6 +8,8 @@ import java.net.URISyntaxException;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.wazzanau.terdoppio.bencode.DecodingException;
 import com.wazzanau.terdoppio.metainfo.MetaInfoFile;
@@ -19,6 +21,8 @@ import com.wazzanau.terdoppio.trackerconnection.TrackerEventListener;
 import com.wazzanau.terdoppio.trackerconnection.udp.ScrapeResponse;
 
 public class HTTPTrackerClientTest {
+	
+	private static final Logger logger = LoggerFactory.getLogger(HTTPTrackerClientTest.class);
 
 	@Test
 	public void test() throws DecodingException, IOException, URISyntaxException, InterruptedException {
@@ -40,20 +44,18 @@ public class HTTPTrackerClientTest {
 			
 			@Override
 			public void onScrapeResponse(ScrapeResponse response) {
-				// TODO Auto-generated method stub
-				
+				// we don't scrape
 			}
 			
 			@Override
 			public void onException(Exception e) {
-				System.out.println("Got exception");
-				
+				logger.info("Got exception");
 			}
 			
 			@Override
 			public void onAnnounceResponse(AnnounceResponse response) {
-				System.out.println("got announce reponse");
-				System.out.println(response);
+				logger.info("got announce reponse");
+				logger.info(response.toString());
 			}
 		});
 

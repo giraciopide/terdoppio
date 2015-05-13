@@ -3,9 +3,14 @@ package com.wazzanau.terdoppio.trackerconnection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.wazzanau.terdoppio.trackerconnection.udp.ScrapeResponse;
 
 public abstract class TrackerClient {
+	
+	private final static Logger logger = LoggerFactory.getLogger(TrackerClient.class);
 	
 	private final String peerId;
 	private final byte[] infoHash;
@@ -34,8 +39,7 @@ public abstract class TrackerClient {
 			try {
 				listener.onAnnounceResponse(response);
 			} catch (Exception e) {
-				e.printStackTrace();
-				// TODO log properly here
+				logger.warn("Exception in announce response handler: " + e.getMessage(), e);
 			}
 		}
 	}
@@ -45,8 +49,7 @@ public abstract class TrackerClient {
 			try {
 				listener.onScrapeResponse(response);
 			} catch (Exception e) {
-				e.printStackTrace();
-				// TODO log properly here
+				logger.warn("Exception in scrape response handler: " + e.getMessage(), e);
 			}
 		}
 	}
@@ -56,8 +59,7 @@ public abstract class TrackerClient {
 			try {
 				listener.onException(exception);
 			} catch (Exception e) {
-				e.printStackTrace();
-				// TODO log properly here
+				logger.warn("Exception in exception handler: " + e.getMessage(), e);
 			}
 		}
 	}

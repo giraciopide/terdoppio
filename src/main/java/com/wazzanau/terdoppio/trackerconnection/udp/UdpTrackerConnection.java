@@ -15,8 +15,12 @@ import io.netty.handler.logging.LoggingHandler;
 
 import java.net.InetSocketAddress;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class UdpTrackerConnection implements Runnable {
 
+	private final static Logger logger = LoggerFactory.getLogger(UdpTrackerConnection.class);
 	private final String host; 
 	private final int port;
 
@@ -57,8 +61,8 @@ public class UdpTrackerConnection implements Runnable {
 			bindChannelFuture.channel().closeFuture().sync();
 
 		} catch (InterruptedException e) {
-			// TODO log something here. 
-
+			logger.info("Interrupted");
+			
 		} finally {
 			running = false;
 			group.shutdownGracefully();
@@ -117,8 +121,7 @@ public class UdpTrackerConnection implements Runnable {
 						T response = (T)msg;
 						userHandler.onResponse(response);
 					} catch (Exception e) { // we don't want bad handlers to mess up with us
-						// TODO log here.
-						e.printStackTrace();
+						logger.error(e.getMessage(), e);
 					}
 				}
 			} finally {

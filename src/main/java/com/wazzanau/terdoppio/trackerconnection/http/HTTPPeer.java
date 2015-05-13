@@ -3,6 +3,9 @@ package com.wazzanau.terdoppio.trackerconnection.http;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.wazzanau.terdoppio.ByteUtils;
 import com.wazzanau.terdoppio.ByteUtils.Endianess;
 import com.wazzanau.terdoppio.bencode.BEDictionary;
@@ -17,7 +20,7 @@ import com.wazzanau.terdoppio.trackerconnection.Peer;
 	// peers: (binary model) Instead of using the dictionary model described above, the peers value may be a string consisting of multiples of 6 bytes. First 4 bytes are the IP address and last 2 bytes are the port number. All in network (big endian) notation.
 	
 public class HTTPPeer implements Peer {
-	
+	private static final Logger logger = LoggerFactory.getLogger(HTTPPeer.class);
 	private static final String KEY_PEER_ID = "peer id";
 	private static final String KEY_IP = "ip";
 	private static final String KEY_PORT = "port";
@@ -100,7 +103,7 @@ public class HTTPPeer implements Peer {
 		try {
 			return Inet4Address.getByName(ip).getAddress();
 		} catch (UnknownHostException e) {
-			// TODO log properly
+			logger.warn("Could not get byte array from ip address", e);
 			return null;
 		}
 	}

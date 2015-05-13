@@ -8,6 +8,9 @@ import java.nio.ByteOrder;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Handler that consumes the handshake message and notifies listener when the handshake message has been completely received.
  * @author marco.nicolini@gmail.com
@@ -15,6 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class HandshakeHandler extends ChannelInboundHandlerAdapter {
 
+	private final static Logger logger = LoggerFactory.getLogger(HandshakeHandler.class);
 	private String protocolString;
 	private byte[] reservedBytes = new byte[8];
 	private byte[] infoHashBytes = new byte[20];
@@ -88,7 +92,7 @@ public class HandshakeHandler extends ChannelInboundHandlerAdapter {
 			try {
 				listener.onHandshakeDone(protocolString, reservedBytes, infoHashBytes, peerIdBytes);
 			} catch (Exception e) { // don't want bad listeners to mess us.
-				// TODO Log here.
+				logger.error(e.getMessage(), e);
 			}
 		}
 	}

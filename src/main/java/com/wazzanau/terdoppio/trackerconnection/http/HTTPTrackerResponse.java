@@ -147,4 +147,10 @@ public class HTTPTrackerResponse implements AnnounceResponse {
 		return Collections.unmodifiableList(peers);
 	}
 
+	@Override
+	public String toString() {
+		return "HTTPTrackerResponse [failureReason=" + failureReason + ", warningMessage=" + warningMessage
+				+ ", interval=" + interval + ", minInterval=" + minInterval + ", trackerId=" + trackerId
+				+ ", complete=" + complete + ", incomplete=" + incomplete + ", peers=" + peers + "]";
+	}
 }

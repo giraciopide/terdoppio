@@ -2,7 +2,6 @@ package com.wazzanau.terdoppio.trackerconnection.http;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.Inet4Address;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,10 +9,6 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -22,11 +17,15 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.wazzanau.terdoppio.ByteUtils;
 import com.wazzanau.terdoppio.bencode.BEDictionary;
 import com.wazzanau.terdoppio.bencode.BEncoding;
 import com.wazzanau.terdoppio.bencode.DecodingException;
+import com.wazzanau.terdoppio.eventloop.EventLoop;
+import com.wazzanau.terdoppio.trackerconnection.AnnounceResponse;
 import com.wazzanau.terdoppio.trackerconnection.TrackerClient;
 
 /**
@@ -35,7 +34,9 @@ import com.wazzanau.terdoppio.trackerconnection.TrackerClient;
  *
  */
 public class HTTPTrackerClient extends TrackerClient {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(HTTPTrackerClient.class);
+	
 	private static final String ANNOUNCE_PARAM_INFO_HASH = "info_hash";
 	private static final String ANNOUNCE_PARAM_PEER_ID = "peer_id";
 	private static final String ANNOUNCE_PARAM_PORT = "port";
@@ -329,100 +330,73 @@ public class HTTPTrackerClient extends TrackerClient {
 				+ customRequestParameters + "]";
 	}
 
-	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(new ThreadFactory() {
-		@Override
-		public Thread newThread(Runnable r) {
-			Thread worker = new Thread(r);
-			worker.setName("HTTPTrckConn" + this.hashCode());
-			worker.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-
-				@Override
-				public void uncaughtException(Thread t, Throwable e) {
-					// we want to notify only exceptions, we should not really deal with errors.
-					if (e instanceof Exception) {
-						notifyListeners((Exception)e);
-					} else {
-						// TODO log properly
-						e.printStackTrace();
-					}
-				}
-			});
-			return worker;
-		}
-	});
-
-	private volatile boolean doRun;
-
-	@Override
-	public void start() {
-		doRun = true;
-		executor.execute(new Runnable() {
-			@Override
-			public void run() {
-				HTTPTrackerResponse response = null;
-
-				// first started request
-				try {
-					response = request(Event.STARTED);
-				} catch (BadTrackerResponseException | TrackerConnectionException | BadTrackerUrlException e) {
-					e.printStackTrace();
-					notifyListeners(e);
-				}
-
-				do {
-					handleResponse(response); // this method will sleep and perform new requests as needed.
-				} while (doRun);
-
-				// when we're gracefully shutting down
-				try {
-					request(Event.STOPPED);
-				} catch (BadTrackerResponseException | TrackerConnectionException | BadTrackerUrlException e) {
-					e.printStackTrace();
-					notifyListeners(e);
-				}
-			}
-		});
-	}
-
-	/**
-	 * This method should handle the response, sleep the advised amount and prepare the next request.
-	 * @param response
-	 */
-	private void handleResponse(HTTPTrackerResponse response) {
-		if (response != null) {
-
-			notifyListeners(response);
-			long interval = response.getInterval();
-			sleepQuietly(interval, TimeUnit.SECONDS);
-
-			//			long up, down, left;
-			//			synchronized (this) {
-			//				up = getUploaded();
-			//				down = getDownloaded();
-			//				left = getLeft();
-			//			}
-
-
-
-		}
+	private volatile EventLoop<HTTPTrackerClientEvent> eventLoop = null;
+	
+	private static enum HTTPTrackerClientEventType {
+		DO_START,
+		DO_STOP,
+		DO_ANNOUNCE,
+		DO_SCRAPE,
+		GOT_ANNOUNCE_RESPONSE,
+		GOT_SCRAPE_RESPONSE,
 	}
 	
-	private void sleepQuietly(long time, TimeUnit unit) {
-		try {
-			Thread.sleep(TimeUnit.MILLISECONDS.convert(time, unit));
-		} catch (InterruptedException e) {
-			// TODO log properly
+	private static class HTTPTrackerClientEvent {
+		public final HTTPTrackerClientEventType type;
+		public final Object payload;
+		
+		public HTTPTrackerClientEvent(HTTPTrackerClientEventType type, Object payload) {
+			super();
+			this.type = type;
+			this.payload = payload;
 		}
+		
+		public final static HTTPTrackerClientEvent startEvent = new HTTPTrackerClientEvent(HTTPTrackerClientEventType.DO_START, null);
+		public final static HTTPTrackerClientEvent stopEvent = new HTTPTrackerClientEvent(HTTPTrackerClientEventType.DO_STOP, null);
+		public final static HTTPTrackerClientEvent announceEvent = new HTTPTrackerClientEvent(HTTPTrackerClientEventType.DO_ANNOUNCE, null);
+		public final static HTTPTrackerClientEvent scrapeEvent = new HTTPTrackerClientEvent(HTTPTrackerClientEventType.DO_SCRAPE, null);
 	}
+	
+	@Override
+	public void start() {
+		EventLoop.Handler<HTTPTrackerClientEvent> handler = new EventLoop.Handler<HTTPTrackerClientEvent>() {
+			@Override
+			public void handle(HTTPTrackerClientEvent event) {
+				switch (event.type) {
+				case DO_ANNOUNCE:
+					break;
+				case DO_SCRAPE:
+					break;
+				case DO_START:
+					break;
+				case DO_STOP:
+					break;
+				case GOT_ANNOUNCE_RESPONSE:
+					handleAnnounceResponse((AnnounceResponse)event.payload);
+					break;
+				default:
+					break;
+
+				}
+			}
+		};
+		eventLoop = new EventLoop<>(handler);
+		
+		eventLoop.putEvent(HTTPTrackerClientEvent.startEvent);
+	}
+
+
 
 	@Override
 	public void stop() {
-		doRun = false;
-		
-		if (executor != null) {
-			executor.shutdown();
+		if (eventLoop != null) {
+			eventLoop.stop();
+			eventLoop = null;
 		}
 	}
 
+	private void handleAnnounceResponse(AnnounceResponse payload) {
+		
+	}
 
 }
