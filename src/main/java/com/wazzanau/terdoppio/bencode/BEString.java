@@ -1,7 +1,10 @@
 package com.wazzanau.terdoppio.bencode;
 
+import com.wazzanau.terdoppio.ByteUtils;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.Comparator;
 
 /**
  * Strings are length-prefixed base ten followed by a colon and the string. For example 4:spam corresponds to 'spam'.
@@ -10,8 +13,30 @@ import java.nio.charset.Charset;
  *
  */
 public class BEString implements BEValue {
+
+	public final static Comparator<BEString> RAW_BYTES_COMPARATOR = (as, bs) -> {
+		final byte[] a = as.getRawBytes();
+		final byte[] b = bs.getRawBytes();
+
+		final int len = Math.min(a.length, b.length);
+
+		for (int i = 0; i < len; ++i) {
+			int comparison = ByteUtils.compareUnsigned(a[i], b[i]);
+			if (comparison != 0) {
+				return comparison;
+			}
+		}
+
+		if (a.length > b.length) {
+			return 1;
+		} else if (a.length < b.length) {
+			return -1;
+		}
+
+		return 0;
+	};
+
 	private final static byte LEN_SEPARATOR = ':';
-	
 	private final String str;
 	private final byte[] data;
 	private final byte[] prefixLen;

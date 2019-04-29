@@ -100,6 +100,10 @@ public class ByteUtils {
 		}
 		return out;
 	}
+
+	public static int compareUnsigned(byte a, byte b) {
+		return Integer.compare(toUint8(a), toUint8(b));
+	}
 	
 	public static String readIPv4fromUInt32(long uInt32Ipv4) {
 		final StringBuilder ipv4 = new StringBuilder();

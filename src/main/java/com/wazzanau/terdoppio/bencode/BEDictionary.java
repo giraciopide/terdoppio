@@ -1,5 +1,7 @@
 package com.wazzanau.terdoppio.bencode;
 
+import com.wazzanau.terdoppio.ByteUtils;
+
 import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Comparator;
@@ -25,30 +27,7 @@ public class BEDictionary implements BEValue, Map<BEString, BEValue> {
 	 * Probably the constraint on key ordering is to guarantee a unique encoded representation of dictionaries
 	 * so that calculating hashes on top of it makes sense.
 	 */
-	private final Map<BEString, BEValue> dictionary = new TreeMap<BEString, BEValue>(new Comparator<BEString>() {
-		@Override
-		public int compare(BEString o1, BEString o2) {
-			byte[] b1 = o1.getRawBytes();
-			byte[] b2 = o2.getRawBytes();
-			
-			int len = Math.min(b1.length, b2.length);
-			
-			for (int i = 0; i < len; ++i) {
-				int comparison = Byte.compare(b1[i], b2[i]);
-				if (comparison != 0) {
-					return comparison;
-				}
-			}
-			
-			if (b1.length > b2.length) {
-				return 1;
-			} else if (b1.length < b2.length) {
-				return -1;
-			}
-			
-			return 0;
-		}
-	});
+	private final Map<BEString, BEValue> dictionary = new TreeMap<>(BEString.RAW_BYTES_COMPARATOR);
 	
 	public BEValue get(BEString key) {
 		return dictionary.get(key);
