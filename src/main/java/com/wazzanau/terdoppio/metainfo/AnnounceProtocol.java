@@ -1,4 +1,4 @@
-package com.wazzanau.terdoppio.trackerconnection;
+package com.wazzanau.terdoppio.metainfo;
 
 public enum AnnounceProtocol {
 	HTTP,

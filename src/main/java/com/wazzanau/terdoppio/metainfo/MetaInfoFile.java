@@ -11,7 +11,6 @@ import com.wazzanau.terdoppio.bencode.BEString;
 import com.wazzanau.terdoppio.bencode.BEValue;
 import com.wazzanau.terdoppio.bencode.BEncoding;
 import com.wazzanau.terdoppio.bencode.DecodingException;
-import com.wazzanau.terdoppio.trackerconnection.AnnounceProtocol;
 
 public class MetaInfoFile {
 	

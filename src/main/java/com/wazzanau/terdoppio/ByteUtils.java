@@ -1,7 +1,6 @@
 package com.wazzanau.terdoppio;
 
 import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -103,23 +102,20 @@ public class ByteUtils {
 	}
 	
 	public static String readIPv4fromUInt32(long uInt32Ipv4) {
-		uInt32Ipv4 = uInt32Ipv4 & 0x00000000FFFFFFFF;
-		StringBuilder ipv4 = new StringBuilder();
+		final StringBuilder ipv4 = new StringBuilder();
 		ipv4.append((uInt32Ipv4 & 0xFF000000) >> 24).append(".");
 		ipv4.append((uInt32Ipv4 & 0x00FF0000) >> 16).append(".");
 		ipv4.append((uInt32Ipv4 & 0x0000FF00) >> 8).append(".");
-		ipv4.append((uInt32Ipv4 & 0x000000FF) >> 0);
+		ipv4.append((uInt32Ipv4 & 0x000000FF));
 		return ipv4.toString();
 	}
 	
 	public static String getIPv4(byte[] ipv4) {
-		InetAddress ip = null;
 		try {
-			ip = Inet4Address.getByAddress(ipv4);
+			return Inet4Address.getByAddress(ipv4).toString();
 		} catch (UnknownHostException e) {
+			throw new IllegalArgumentException("Invalid ip address");
 		}
-		
-		return ip == null ? "invalid ip address" : ip.toString();
 	}
 	
 	private static MessageDigest getSHA1Digest() {
