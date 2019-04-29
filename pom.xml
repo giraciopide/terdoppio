@@ -3,11 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.wazzanau.terdoppio</groupId>
 	<artifactId>terdoppio</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>terdoppio</name>
-	<description>A simple torrent library for:
-- bencoding
-- tracker clients (http supported, udp is in the works).</description>
+	<description>A simple torrent library for bencoding</description>
 	<url>https://github.com/marco-nicolini/terdoppio</url>
 
 	<properties>
@@ -16,26 +14,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>true</downloadJavadocs>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-		</dependency>
+
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -65,10 +45,14 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.12</version>
+			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+			<version>4.12</version>
+		</dependency>
 	</dependencies>
-
-
-
 </project>
