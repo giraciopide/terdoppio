@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 
 public interface BEValue {
 	
-	public BEType getType();
+	BEType getType();
 
 	/**
 	 * Returns a newly allocated byte array containing the encoded BEString

@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class ByteUtils {
 		
-	public static enum Endianess {
+	public enum Endianess {
 		BIG_ENDIAN,
 		LITTLE_ENDIAN
 	}
@@ -79,7 +79,7 @@ public class ByteUtils {
 	 * @return
 	 */
 	public static long readUInt32(byte[] num, int offset, Endianess endianess) {
-		long out = 0;
+		long out;
 		switch (endianess) {
 		case BIG_ENDIAN:
 			out = (long)num[offset + 0] & 0xFF;
@@ -136,9 +136,9 @@ public class ByteUtils {
 	
 	public static String toString(byte[] bytes) {
 		StringBuilder out = new StringBuilder();
-		for (int i = 0; i < bytes.length; i++) {
-			out.append((char)bytes[i]);
-		}
+        for (byte aByte : bytes) {
+            out.append((char) aByte);
+        }
 		return out.toString();
 	}
 }

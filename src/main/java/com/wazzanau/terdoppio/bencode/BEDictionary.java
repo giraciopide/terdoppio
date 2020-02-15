@@ -1,10 +1,7 @@
 package com.wazzanau.terdoppio.bencode;
 
-import com.wazzanau.terdoppio.ByteUtils;
-
 import java.nio.ByteBuffer;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
