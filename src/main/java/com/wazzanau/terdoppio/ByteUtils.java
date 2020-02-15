@@ -58,8 +58,7 @@ public class ByteUtils {
 			out += ((int)num[offset + 0] & 0xFF) << 8;
 			break;
 		default:
-			// won't happen
-			break;
+			throw new IllegalStateException("Unsupported endianess [" + endianess + "]");
 		}
 		return out;
 	}
@@ -95,8 +94,7 @@ public class ByteUtils {
 			out += ((long)num[offset + 0] & 0xFF) << 24;
 			break;
 		default:
-			// won't happen
-			break;
+			throw new IllegalStateException("Unsupported endianess [" + endianess + "]");
 		}
 		return out;
 	}
