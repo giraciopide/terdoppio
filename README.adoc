@@ -1,0 +1,3 @@
+= terdoppio
+
+A java library for bencoding (the bittorent protocol wire-format) inspired by the jsonp API.
